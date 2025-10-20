@@ -173,7 +173,7 @@ def convert_timestamps(obj):
     return obj
 
 
-def send_rocket_track_to_api(api_url="http://localhost:3001"):
+def send_rocket_track_to_api():
     """
     Create and send the rocket track directly to the API
     

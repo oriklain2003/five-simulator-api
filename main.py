@@ -604,7 +604,6 @@ if __name__ == "__main__":
     print("="*70)
     print("SIMULATION API SERVER")
     print("="*70)
-    print("\nStarting FastAPI server on http://localhost:8000")
     print("\nAvailable endpoints:")
     print("  POST /radar/start           - Start random radar")
     print("  POST /radar/stop            - Stop random radar")

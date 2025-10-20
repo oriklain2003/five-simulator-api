@@ -377,7 +377,7 @@ def create_course(course_data, processed_points):
     }
 
 
-def send_radar_points_with_timing(api_url="http://localhost:3001"):
+def send_radar_points_with_timing(api_url):
     """
     Send radar points with proper timing: first at 10s, then +1s for each subsequent
     Returns the positions for later use in the moving object simulation

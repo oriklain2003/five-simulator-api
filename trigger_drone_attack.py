@@ -14,12 +14,14 @@ import requests
 import json
 from datetime import datetime, timedelta
 
+from simulator_api.config import API_BASE_URL
+
 # Add path for imports
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'dataaa', 'genareft'))
 
 from all import create_drone_track_simulation, send_radar_points_with_timing
 
-def send_drone_track_to_api(api_url="http://localhost:3001"):
+def send_drone_track_to_api():
     """
     Create and send the drone track directly to the API
     
@@ -107,7 +109,6 @@ def main():
     print("  1. Wait 10 seconds")
     print("  2. Send 4 radar points (1 second apart)")
     print("  3. Send the drone track to the API")
-    print("\nMake sure your API is running on http://localhost:3001")
     print("\n" + "="*60)
     
     # input("Press Enter to trigger the drone attack...")
@@ -118,7 +119,7 @@ def main():
     
     # Send radar points
     try:
-        send_radar_points_with_timing()
+        send_radar_points_with_timing(API_BASE_URL)
     except Exception as e:
         print(f"❌ Error sending radar points: {e}")
         print("Continuing with drone track anyway...")

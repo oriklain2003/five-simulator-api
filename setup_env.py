@@ -35,7 +35,6 @@ INACTIVITY_TIMEOUT=10
     print("✅ .env file created successfully!")
     print(f"📁 Location: {env_path}")
     print("\n📝 Default configuration:")
-    print("   API_BASE_URL: http://localhost:3001")
     print("   OBJECTS_ENDPOINT: /objects/temporary")
     print("   TICK_INTERVAL: 1")
     print("   INACTIVITY_TIMEOUT: 10")
