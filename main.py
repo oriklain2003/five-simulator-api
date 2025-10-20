@@ -621,4 +621,4 @@ if __name__ == "__main__":
     print("\nDocs available at: http://localhost:8000/docs")
     print("="*70)
     
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=80)
