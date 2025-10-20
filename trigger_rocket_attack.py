@@ -131,7 +131,7 @@ def create_rocket_track_simulation(start_lat, start_lon, end_lat, end_lon, offse
         "total_speed_changes": 0,
         "total_altitude_changes": 0,
         "points": points,
-        "detailedMessage":"התגלתה מטרה מהירה 5 מייל צפונית צפונית לקו גבול לבנון.",
+        "detailedMessage":"התגלתה מטרה מהירה 20 מייל מגבול מזרח",
         "type": "arrow",
         "name": "טיל שיוט",  # Name: Ballistic missile
         "originCountry": "צפון ירדן",
