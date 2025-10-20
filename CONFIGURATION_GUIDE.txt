@@ -1,0 +1,119 @@
+================================================================================
+                    CONFIGURATION QUICK REFERENCE
+================================================================================
+
+SETUP IN 3 STEPS:
+-----------------
+
+1. Install dependencies (includes python-dotenv):
+   pip install -r requirements.txt
+
+2. Create .env file (choose one method):
+   
+   METHOD A - Automatic:
+   python setup_env.py
+   
+   METHOD B - Manual:
+   Copy env.example to .env and edit
+   
+   METHOD C - Skip it:
+   Uses defaults (http://localhost:3001)
+
+3. Start the API:
+   python main.py
+
+
+CONFIGURATION VARIABLES:
+------------------------
+
+Variable Name        | Default Value              | Description
+---------------------|----------------------------|---------------------------
+API_BASE_URL         | http://localhost:3001      | Target API URL
+OBJECTS_ENDPOINT     | /objects/temporary         | Objects endpoint path
+TICK_INTERVAL        | 1                          | Simulation tick (seconds)
+INACTIVITY_TIMEOUT   | 10                         | Object timeout (seconds)
+
+
+EXAMPLE .env FILE:
+------------------
+
+API_BASE_URL=http://localhost:3001
+OBJECTS_ENDPOINT=/objects/temporary
+TICK_INTERVAL=1
+INACTIVITY_TIMEOUT=10
+
+
+HOW TO CHANGE API URL:
+----------------------
+
+Option 1 - Edit .env file:
+  1. Open .env in text editor
+  2. Change API_BASE_URL=http://your-api-url:port
+  3. Save and restart API
+
+Option 2 - Set environment variable (temporary):
+  Windows: $env:API_BASE_URL="http://192.168.1.100:3001"
+  Linux/Mac: export API_BASE_URL="http://192.168.1.100:3001"
+
+
+VERIFY CONFIGURATION:
+---------------------
+
+When starting the API, you'll see:
+
+📡 API Configuration loaded:
+   API_BASE_URL: http://localhost:3001
+   OBJECTS_ENDPOINT: /objects/temporary
+   TICK_INTERVAL: 1s
+   INACTIVITY_TIMEOUT: 10s
+
+
+COMMON SCENARIOS:
+-----------------
+
+Local Development:
+  API_BASE_URL=http://localhost:3001
+
+Different Port:
+  API_BASE_URL=http://localhost:8080
+
+Remote Server:
+  API_BASE_URL=http://192.168.1.100:3001
+
+Production:
+  API_BASE_URL=https://api.production.com
+
+
+FILES REFERENCE:
+----------------
+
+env.example           - Template for .env file
+.env                  - Your actual configuration (create this!)
+ENV_SETUP.md          - Detailed setup instructions
+ENV_MIGRATION.md      - What changed and why
+CONFIGURATION_GUIDE.txt - This file!
+
+
+TROUBLESHOOTING:
+----------------
+
+Q: Changes to .env not working?
+A: Restart the API server (Ctrl+C then python main.py)
+
+Q: Connection errors?
+A: Verify API_BASE_URL matches your target API
+
+Q: Want to reset to defaults?
+A: Delete .env file or run: python setup_env.py
+
+
+================================================================================
+                        NEED MORE HELP?
+================================================================================
+
+Read ENV_SETUP.md for detailed instructions
+Read ENV_MIGRATION.md to understand what changed
+Run: python setup_env.py for automatic setup
+
+================================================================================
+
