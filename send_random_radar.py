@@ -7,7 +7,7 @@ import random
 import time
 from datetime import datetime
 
-from simulator_api.config import API_BASE_URL
+from config import API_BASE_URL
 
 # Polygon boundaries
 # POLYGON ((33.00293 29.190533, 37.265625 29.190533, 37.265625 33.504759, 33.00293 33.504759, 33.00293 29.190533))

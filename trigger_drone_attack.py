@@ -14,7 +14,7 @@ import requests
 import json
 from datetime import datetime, timedelta
 
-from simulator_api.config import API_BASE_URL
+from config import API_BASE_URL
 
 # Add path for imports
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'dataaa', 'genareft'))
