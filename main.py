@@ -18,6 +18,7 @@ import send_random_radar
 import send_random_radar_decoy
 import trigger_drone_attack
 import trigger_rocket_attack
+import realtime_opensky
 
 # Create FastAPI app
 app = FastAPI(
@@ -41,7 +42,8 @@ running_tasks = {
     "random_radar_decoy": False,
     "main_simulation": False,
     "drone_attack": False,
-    "rocket_attack": False
+    "rocket_attack": False,
+    "realtime_opensky": False
 }
 
 
@@ -239,6 +241,8 @@ async def root():
             "/attack/rocket/stop": "Stop rocket attack",
             "/simulation/start": "Start main simulation (simulated_flights7.json)",
             "/simulation/stop": "Stop main simulation",
+            "/realtime/opensky/start": "Start realtime FlightRadar24 flight tracking",
+            "/realtime/opensky/stop": "Stop realtime FlightRadar24 flight tracking",
             "/simulation/stop-all": "Stop all running tasks",
             "/simulation/status": "Get status of all running tasks"
         }
@@ -550,6 +554,50 @@ async def stop_main_simulation():
     )
 
 
+def run_realtime_opensky():
+    """Run realtime FlightRadar24 flight tracking in background"""
+    running_tasks["realtime_opensky"] = True
+    try:
+        print("Starting realtime FlightRadar24 flight tracking...")
+        realtime_opensky.run_realtime_simulation(running_tasks)
+    except Exception as e:
+        print(f"Error in realtime FlightRadar24: {e}")
+        import traceback
+        traceback.print_exc()
+    finally:
+        running_tasks["realtime_opensky"] = False
+        print("Realtime FlightRadar24 stopped")
+
+
+@app.post("/realtime/opensky/start", response_model=StatusResponse)
+async def start_realtime_opensky():
+    """Start realtime FlightRadar24 flight tracking"""
+    if running_tasks["realtime_opensky"]:
+        raise HTTPException(status_code=400, detail="Realtime FlightRadar24 is already running")
+    
+    thread = threading.Thread(target=run_realtime_opensky, daemon=True)
+    thread.start()
+    
+    return StatusResponse(
+        status="success",
+        message="Realtime FlightRadar24 flight tracking started"
+    )
+
+
+@app.post("/realtime/opensky/stop", response_model=StatusResponse)
+async def stop_realtime_opensky():
+    """Stop realtime FlightRadar24 flight tracking"""
+    if not running_tasks["realtime_opensky"]:
+        raise HTTPException(status_code=400, detail="Realtime FlightRadar24 is not running")
+    
+    running_tasks["realtime_opensky"] = False
+    
+    return StatusResponse(
+        status="success",
+        message="Realtime FlightRadar24 flight tracking stopping..."
+    )
+
+
 @app.post("/simulation/stop-all", response_model=StatusResponse)
 async def stop_all_simulations():
     """Stop all running simulations and tasks"""
@@ -575,6 +623,10 @@ async def stop_all_simulations():
         running_tasks["rocket_attack"] = False
         stopped_tasks.append("rocket_attack")
     
+    if running_tasks["realtime_opensky"]:
+        running_tasks["realtime_opensky"] = False
+        stopped_tasks.append("realtime_opensky")
+    
     if not stopped_tasks:
         return StatusResponse(
             status="success",
@@ -595,7 +647,8 @@ async def get_simulation_status():
         "random_radar_decoy": "running" if running_tasks["random_radar_decoy"] else "stopped",
         "main_simulation": "running" if running_tasks["main_simulation"] else "stopped",
         "drone_attack": "running" if running_tasks["drone_attack"] else "stopped",
-        "rocket_attack": "running" if running_tasks["rocket_attack"] else "stopped"
+        "rocket_attack": "running" if running_tasks["rocket_attack"] else "stopped",
+        "realtime_opensky": "running" if running_tasks["realtime_opensky"] else "stopped"
     }
 
 
@@ -605,19 +658,22 @@ if __name__ == "__main__":
     print("SIMULATION API SERVER")
     print("="*70)
     print("\nAvailable endpoints:")
-    print("  POST /radar/start           - Start random radar")
-    print("  POST /radar/stop            - Stop random radar")
-    print("  POST /radar/decoy/start     - Start random radar decoy")
-    print("  POST /radar/decoy/stop      - Stop random radar decoy")
-    print("  POST /attack/drone/start    - Trigger drone attack")
-    print("  POST /attack/drone/stop     - Stop drone attack")
-    print("  POST /attack/rocket/start   - Trigger rocket attack")
-    print("  POST /attack/rocket/stop    - Stop rocket attack")
-    print("  POST /simulation/start      - Start main simulation")
-    print("  POST /simulation/stop       - Stop main simulation")
-    print("  POST /simulation/stop-all   - Stop ALL running tasks")
-    print("  GET  /simulation/status     - Get status of tasks")
+    print("  POST /radar/start              - Start random radar")
+    print("  POST /radar/stop               - Stop random radar")
+    print("  POST /radar/decoy/start        - Start random radar decoy")
+    print("  POST /radar/decoy/stop         - Stop random radar decoy")
+    print("  POST /attack/drone/start       - Trigger drone attack")
+    print("  POST /attack/drone/stop        - Stop drone attack")
+    print("  POST /attack/rocket/start      - Trigger rocket attack")
+    print("  POST /attack/rocket/stop       - Stop rocket attack")
+    print("  POST /simulation/start         - Start main simulation")
+    print("  POST /simulation/stop          - Stop main simulation")
+    print("  POST /realtime/opensky/start   - Start realtime FlightRadar24")
+    print("  POST /realtime/opensky/stop    - Stop realtime FlightRadar24")
+    print("  POST /simulation/stop-all      - Stop ALL running tasks")
+    print("  GET  /simulation/status        - Get status of tasks")
     print("\nDocs available at: http://localhost:8000/docs")
     print("="*70)
     
     uvicorn.run(app, host="0.0.0.0", port=80)
+
